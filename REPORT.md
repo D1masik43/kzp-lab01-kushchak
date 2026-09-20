@@ -60,15 +60,18 @@ data/input.csv            — приклад вхідних даних (5 кор
 
 | № GitHub Issue | Зміна | Коміт або PR |
 |---|---|---|
-| _заповнити після створення репозиторію_ | Налаштувати Maven-проєкт | |
-| | Налаштувати аналізатор і пакування | |
-| | Налаштувати GitHub Actions | |
-| | Реалізувати читання й перевірку записів | |
-| | Сформувати звіт | |
-| | Додати документацію | |
+| [#1](https://github.com/D1masik43/kzp-lab01-kushchak/issues/1) | Налаштувати Maven-проєкт | `99b435a` |
+| [#2](https://github.com/D1masik43/kzp-lab01-kushchak/issues/2) | Налаштувати аналізатор і пакування | `99b435a` |
+| [#3](https://github.com/D1masik43/kzp-lab01-kushchak/issues/3) | Налаштувати GitHub Actions | `99b435a` |
+| [#4](https://github.com/D1masik43/kzp-lab01-kushchak/issues/4) | Реалізувати читання й перевірку записів | `99b435a` |
+| [#5](https://github.com/D1masik43/kzp-lab01-kushchak/issues/5) | Сформувати звіт | `99b435a` |
+| [#6](https://github.com/D1masik43/kzp-lab01-kushchak/issues/6) | Додати документацію | `99b435a` |
+| [#7](https://github.com/D1masik43/kzp-lab01-kushchak/issues/7) | Дозаповнити таблицю GitHub Issues/PR у звіті | PR `docs/report-issues-table`, `Closes #7` |
 
-> Розділ заповнюється після створення публічного репозиторію `kzp-lab01-kushchak`
-> і розбиття роботи на GitHub Issues (роль Менеджера, `ai/manager.md`).
+Issues #1–#6 описують інфраструктуру та функціональність, реалізовану в
+початковому коміті `99b435a`; закриті після перевірки відповідності коду
+критеріям готовності. Issue #7 і пов'язаний Pull Request демонструють повний
+цикл Issue → гілка → коміт → Pull Request → CI → merge.
 
 ## 7. Приклади роботи
 
@@ -108,8 +111,9 @@ BUILD SUCCESS
 обробки після хибного рядка та форматування звіту з фіксованою кількістю знаків
 після крапки. Українські символи використано в тестових даних напряму.
 
-> Після налаштування GitHub Actions додати посилання на успішний запуск CI на
-> трьох ОС.
+GitHub Actions підтвердив кросплатформність на трьох ОС: успішний запуск CI —
+[run #1](https://github.com/D1masik43/kzp-lab01-kushchak/actions/runs/35511646989)
+(`verify` пройшов на `ubuntu-latest`, `windows-latest`, `macos-latest`).
 
 ## 9. Документація
 
