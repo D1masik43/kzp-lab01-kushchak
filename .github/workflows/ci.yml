@@ -1,0 +1,53 @@
+# Один workflow перевіряє однаковий commit на трьох операційних системах.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # Отримуємо код commit або Pull Request.
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Встановлюємо однаковий JDK 21 і кешуємо залежності Maven.
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # Номер запуску можна використати у --version і назві артефакта.
+      - name: Show CI build number
+        run: echo "CI build ${{ github.run_number }}"
+
+      # На macOS та Ubuntu Wrapper запускають як Unix-скрипт.
+      - name: Verify on Unix
+        if: runner.os != 'Windows'
+        run: ./mvnw -B verify
+
+      # На Windows використовується окремий cmd-скрипт Wrapper.
+      - name: Verify on Windows
+        if: runner.os == 'Windows'
+        run: .\mvnw.cmd -B verify
+
+      # Кожна ОС отримує власний артефакт, щоб результати не перезаписувалися.
+      - name: Upload JAR
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jar-${{ matrix.os }}-${{ github.run_number }}
+          path: target/*.jar
+          if-no-files-found: error
