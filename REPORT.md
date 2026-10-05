@@ -105,23 +105,24 @@ BUILD SUCCESS
 target/lab01-1.0.0.jar` і `java -jar target/lab01-1.0.0.jar --version`
 працюють без змін.
 
-> Після відкриття Pull Request додати посилання на зелений CI-запуск
-> (Windows/macOS/Ubuntu) для цієї гілки.
+GitHub Actions підтвердив кросплатформність на трьох ОС після мерджу в
+`main` — успішний запуск CI:
+[run #37325818781](https://github.com/D1masik43/kzp-lab01-kushchak/actions/runs/37325818781)
+(`verify` пройшов на `ubuntu-latest`, `windows-latest`, `macos-latest` на
+мердж-коміті `4dbd32d`).
 
 ## 8. GitHub Issues і Pull Request
 
 | № GitHub Issue | Зміна | Коміт або PR |
 |---|---|---|
-| _створити на GitHub_ | Створити клас-сутність Match | |
-| | Додати валідацію інваріантів у конструкторі | |
-| | Створити record ScoreAttendance | |
-| | Перенести розбір CSV до фабричного методу fromCsv | |
-| | Додати тести Match, ScoreAttendance і перевірити сумісність зі старими тестами | |
-| | Оновити документацію (README, REPORT, javadoc) | |
+| [#9](https://github.com/D1masik43/kzp-lab01-kushchak/issues/9) | Рефактор: клас-сутність Match, record ScoreAttendance, фабричний метод fromCsv, тести, документація | PR [#10](https://github.com/D1masik43/kzp-lab01-kushchak/pull/10), `Closes #9` |
 
-> Розділ заповнюється після створення Issues на GitHub і відкриття Pull
-> Request з гілки `lab02/entity-refactor` (за тим самим процесом, що й у
-> лабораторній роботі № 1: `Closes #N` в описі PR).
+Issue #9 описував повний обсяг перебудови лабораторної роботи № 2 (клас
+`Match`, валідація інваріантів, `record ScoreAttendance`, перенесення
+розбору CSV до `fromCsv`, нові тести, оновлення README/REPORT). Pull
+Request #10 з гілки `lab02/entity-refactor` реалізував усі ці пункти одним
+коміном, пройшов зелений CI на трьох ОС і змерджений у `main` (`4dbd32d`),
+закривши issue #9 автоматично через `Closes #9` в описі.
 
 ## 9. Порівняння поведінки
 
