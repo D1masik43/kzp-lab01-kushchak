@@ -167,18 +167,21 @@ BUILD SUCCESS
 Зібраний `target/lab01-1.0.0.jar` запущено вручну — консольний звіт
 побайтово збігається з лаб. 1-2 (розділ 12).
 
-> Після відкриття Pull Request додати посилання на зелений CI-запуск
-> (Windows/macOS/Ubuntu) для гілки `lab03/match-hierarchy`.
+GitHub Actions підтвердив кросплатформність на трьох ОС після мерджу в
+`main` — успішний запуск CI:
+[run #38130661891](https://github.com/D1masik43/kzp-lab01-kushchak/actions/runs/38130661891)
+(`verify` пройшов на `ubuntu-latest`, `windows-latest`, `macos-latest` на
+мердж-коміті `204bca8`).
 
 ## 11. GitHub Issues і Pull Request
 
 | № GitHub Issue | Зміна | Коміт або PR |
 |---|---|---|
-| _створити на GitHub_ | Базовий тип Match, підтипи LeagueMatch/PlayoffMatch, enum MatchKind, equals/hashCode, тести, документація | |
+| [#11](https://github.com/D1masik43/kzp-lab01-kushchak/issues/11) | Базовий тип Match, підтипи LeagueMatch/PlayoffMatch, enum MatchKind, equals/hashCode, тести, документація | PR [#12](https://github.com/D1masik43/kzp-lab01-kushchak/pull/12), `Closes #11` |
 
-> Розділ заповнюється після створення issue на GitHub (за зразком issue #9
-> з лаб. 2) і відкриття Pull Request з гілки `lab03/match-hierarchy`
-> (`Closes #N` в описі PR).
+Pull Request #12 з гілки `lab03/match-hierarchy` пройшов зелений CI на
+трьох ОС і змерджений у `main` (`204bca8`), закривши issue #11 автоматично
+через `Closes #11` в описі.
 
 ## 12. Порівняння поведінки
 
