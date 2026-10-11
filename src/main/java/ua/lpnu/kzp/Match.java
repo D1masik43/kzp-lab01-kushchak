@@ -4,11 +4,14 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Описує коректний результат одного матчу ліги (варіант 17, «Спортивна ліга»).
+ * Спільний базовий тип результату матчу ліги (варіант 17, «Спортивна ліга»).
  *
  * <p>Інваріанти: назви команд не порожні; рахунок і відвідуваність невід'ємні.
+ * Підтипи {@link LeagueMatch} і {@link PlayoffMatch} надають власну реалізацію
+ * нарахування очок і, за потреби, додають власні інваріанти (наприклад,
+ * заборону нічиєї в плей-офф).
  */
-public final class Match {
+public abstract class Match {
 
     private static final int FIELD_COUNT = 5;
 
@@ -19,7 +22,7 @@ public final class Match {
     private final int attendance;
 
     /**
-     * Створює коректний результат матчу, перевіряючи інваріанти предметної області.
+     * Перевіряє спільні інваріанти й зберігає стан матчу.
      *
      * @param homeTeam команда господарів
      * @param awayTeam команда гостей
@@ -29,10 +32,9 @@ public final class Match {
      * @throws NullPointerException якщо назва команди відсутня
      * @throws IllegalArgumentException якщо назва команди порожня або число від'ємне
      */
-    public Match(String homeTeam, String awayTeam, int homeScore, int awayScore, int attendance) {
+    protected Match(String homeTeam, String awayTeam, int homeScore, int awayScore, int attendance) {
         this.homeTeam = Objects.requireNonNull(homeTeam, "Назва команди господарів не може бути null");
         this.awayTeam = Objects.requireNonNull(awayTeam, "Назва команди гостей не може бути null");
-        // Порожній текст і відсутнє значення мають різні причини відхилення.
         if (homeTeam.isBlank() || awayTeam.isBlank()) {
             throw new IllegalArgumentException("порожня назва команди");
         }
@@ -45,64 +47,95 @@ public final class Match {
     }
 
     /**
-     * Створює результат матчу з рядка CSV {@code home;away;homeScore;awayScore;attendance}.
+     * Розбиває рядок CSV на поля варіанта й перевіряє їх кількість.
      *
-     * <p>Фабрика відповідає лише за структуру й типи полів, конструктор — за інваріанти.
+     * <p>Спільна для всіх підтипів перевірка структури рядка; кожен підтип
+     * далі сам перетворює числові поля й створює свій об'єкт.
      *
-     * @param line рядок у форматі варіанта
-     * @return створений результат матчу
-     * @throws IllegalArgumentException якщо структура рядка або число в ньому некоректні
+     * @param line рядок CSV у форматі {@code home;away;homeScore;awayScore;attendance}
+     * @return масив із 5 полів запису
+     * @throws IllegalArgumentException якщо кількість полів не відповідає формату
      */
-    public static Match fromCsv(String line) {
+    protected static String[] splitFields(String line) {
         Objects.requireNonNull(line, "Рядок не може бути null");
         String[] fields = line.split(";", -1);
         if (fields.length != FIELD_COUNT) {
             throw new IllegalArgumentException("очікується %d полів".formatted(FIELD_COUNT));
         }
-        try {
-            int homeScore = Integer.parseInt(fields[2].trim());
-            int awayScore = Integer.parseInt(fields[3].trim());
-            int attendance = Integer.parseInt(fields[4].trim());
-            return new Match(fields[0].trim(), fields[1].trim(), homeScore, awayScore, attendance);
-        } catch (NumberFormatException exception) {
-            throw new IllegalArgumentException("числове поле має помилковий формат", exception);
-        }
+        return fields;
     }
 
     /** Повертає назву команди господарів. */
-    public String getHomeTeam() {
+    public final String getHomeTeam() {
         return homeTeam;
     }
 
     /** Повертає назву команди гостей. */
-    public String getAwayTeam() {
+    public final String getAwayTeam() {
         return awayTeam;
     }
 
     /** Повертає кількість голів господарів. */
-    public int getHomeScore() {
+    public final int getHomeScore() {
         return homeScore;
     }
 
     /** Повертає кількість голів гостей. */
-    public int getAwayScore() {
+    public final int getAwayScore() {
         return awayScore;
     }
 
     /** Повертає кількість глядачів на матчі. */
-    public int getAttendance() {
+    public final int getAttendance() {
         return attendance;
     }
 
     /** Повертає сумарну кількість голів обох команд у матчі. */
-    public int totalGoals() {
+    public final int totalGoals() {
         return homeScore + awayScore;
     }
 
-    /** Повертає текстове подання результату матчу для звіту/налагодження. */
+    /** Повертає категорію матчу. */
+    public abstract MatchKind getKind();
+
+    /** Обчислює очки, які отримує команда господарів за результат матчу. */
+    public abstract int homePoints();
+
+    /** Обчислює очки, які отримує команда гостей за результат матчу. */
+    public abstract int awayPoints();
+
+    /**
+     * Порівнює матчі за підтипом і значеннями полів.
+     *
+     * <p>{@code getClass()} (а не {@code instanceof}) не дає визнати рівними
+     * об'єкти різних підтипів із випадково однаковими полями.
+     */
+    @Override
+    public final boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        Match match = (Match) other;
+        return homeScore == match.homeScore
+                && awayScore == match.awayScore
+                && attendance == match.attendance
+                && homeTeam.equals(match.homeTeam)
+                && awayTeam.equals(match.awayTeam);
+    }
+
+    /** Повертає хеш-код, узгоджений із {@link #equals(Object)}. */
+    @Override
+    public final int hashCode() {
+        return Objects.hash(getClass(), homeTeam, awayTeam, homeScore, awayScore, attendance);
+    }
+
+    /** Повертає текстове подання результату матчу для звіту й налагодження. */
     @Override
     public String toString() {
-        return String.format(Locale.ROOT, "%s %d:%d %s (%d глядачів)",
-                homeTeam, homeScore, awayScore, awayTeam, attendance);
+        return String.format(Locale.ROOT, "%s %d:%d %s (%d глядачів, %s)",
+                homeTeam, homeScore, awayScore, awayTeam, attendance, getKind().label());
     }
 }

@@ -8,8 +8,9 @@ import java.util.Locale;
  * Перевіряє й обчислює показники для записів варіанта 17 «Спортивна ліга».
  *
  * <p>Формат одного запису: {@code home;away;homeScore;awayScore;attendance}. Розбір і перевірка
- * одного рядка делеговані класу-сутності {@link Match}; тут лише читання списку рядків,
- * накопичення помилок і обчислення підсумку {@link ScoreAttendance}.
+ * одного рядка делеговані класу {@link LeagueMatch} (підтип спільного типу {@link Match});
+ * тут лише читання списку рядків, накопичення помилок і обчислення підсумку
+ * {@link ScoreAttendance} за об'єктами спільного типу {@code Match}.
  */
 public final class LeagueProcessor {
 
@@ -75,7 +76,7 @@ public final class LeagueProcessor {
 
             // Помилка одного CSV-рядка не перериває обробку решти вхідних даних.
             try {
-                matches.add(Match.fromCsv(line));
+                matches.add(LeagueMatch.fromCsv(line));
             } catch (IllegalArgumentException exception) {
                 errors.add("Рядок %d: %s".formatted(rowNumber, exception.getMessage()));
             }
