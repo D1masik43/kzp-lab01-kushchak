@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!--
+        CT_CONSTRUCTOR_THROW: Match - абстрактний базовий тип; конструктор
+        перевіряє спільні інваріанти й кидає виняток при хибних даних, що
+        методика лабораторної роботи вимагає явно. Правило попереджає про
+        атаку через Finalizer, але обидва конкретні підтипи (LeagueMatch,
+        PlayoffMatch) оголошені final і не перевизначають finalize(), тому
+        описана вразливість тут неможлива.
+    -->
+    <Match>
+        <Class name="ua.lpnu.kzp.Match"/>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+</FindBugsFilter>
