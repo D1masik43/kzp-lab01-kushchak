@@ -10,7 +10,12 @@ import java.util.Locale;
  * <p>Формат одного запису: {@code home;away;homeScore;awayScore;attendance}. Розбір і перевірка
  * одного рядка делеговані класу {@link LeagueMatch} (підтип спільного типу {@link Match});
  * тут лише читання списку рядків, накопичення помилок і обчислення підсумку
- * {@link ScoreAttendance} за об'єктами спільного типу {@code Match}.
+ * {@link ScoreAttendance} за об'єктами спільного типу {@code Match}. Підсумок
+ * ({@link #summarize(List)}) обчислюється через Stream API (лаб. 4): цикл
+ * розбору CSV-рядків лишився циклом навмисно, бо йому потрібна нумерація
+ * рядків і накопичення помилок без зупинки обробки — для декларативних
+ * запитів над уже розібраною колекцією {@code List<Match>} див.
+ * {@link LeagueScheduleQueries}.
  */
 public final class LeagueProcessor {
 
@@ -86,14 +91,9 @@ public final class LeagueProcessor {
     }
 
     private static ScoreAttendance summarize(List<Match> matches) {
-        long totalGoals = 0;
-        long totalAttendance = 0;
-        int maxAttendance = 0;
-        for (Match match : matches) {
-            totalGoals += match.totalGoals();
-            totalAttendance += match.getAttendance();
-            maxAttendance = Math.max(maxAttendance, match.getAttendance());
-        }
+        long totalGoals = matches.stream().mapToInt(Match::totalGoals).sum();
+        long totalAttendance = matches.stream().mapToLong(Match::getAttendance).sum();
+        int maxAttendance = matches.stream().mapToInt(Match::getAttendance).max().orElse(0);
         // Явне приведення до double не дає цілочисловому діленню відкинути дробову частину.
         double averageGoals = matches.isEmpty() ? 0.0 : (double) totalGoals / matches.size();
         return new ScoreAttendance(matches.size(), averageGoals, maxAttendance, totalAttendance);
