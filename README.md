@@ -1,6 +1,6 @@
 # Спортивна ліга — консольний звіт
 
-Лабораторні роботи № 1–3 з курсу «Кросплатформні засоби програмування».
+Лабораторні роботи № 1–4 з курсу «Кросплатформні засоби програмування».
 Варіант 17.
 
 ## Призначення
@@ -76,6 +76,41 @@ home;away;homeScore;awayScore;attendance
 звичайний звіт (`LeagueProcessor.summarize`), і нарахування очок працюють
 через спільний тип `Match`, викликаючи `homePoints()`/`awayPoints()`
 поліморфно.
+
+## Потокова обробка (лабораторна робота № 4)
+
+Основний конвеєр (`data/input.csv` → `LeagueProcessor` → консольний звіт)
+лишився незмінним — методика лаб. 4 вимагає зберегти вхідні дані й зовнішній
+формат звіту лаб. 1-3. Його внутрішній підсумок (`LeagueProcessor.summarize`)
+переписано з циклу на Stream API (`mapToInt`/`mapToLong`/`max`), результат
+той самий.
+
+Для п'яти Stream-запитів варіанта 17, яким потрібні поля «тур» і «дата»
+(яких немає в `data/input.csv`), додано окрему сутність-композицію
+`ScheduledMatch` (матч + тур + дата) і окремий контрольний набір
+`data/schedule.csv` у форматі:
+
+```
+home;away;homeScore;awayScore;attendance;tour;date
+```
+
+`LeagueScheduleQueries` (`src/main/java/ua/lpnu/kzp/LeagueScheduleQueries.java`)
+реалізує п'ять іменованих запитів над `List<ScheduledMatch>`:
+
+1. `matchesOfTour` — `filter` за номером туру.
+2. `scoresAsText` — `map` рахунку в текст `"H:A"`.
+3. `countByTour` — `Collectors.groupingBy` + `Collectors.counting()`, ключі
+   впорядковані зростанням туру (`TreeMap`).
+4. `homeGoalsStatistics` — `Collectors.summarizingInt` голів господарів.
+5. `topByGoalDifference` — складений компаратор (різниця голів спаданням,
+   дата зростанням) + `sorted().limit(N)`; `N < 0` відхиляється
+   `IllegalArgumentException`, `N = 0` повертає порожній список, `N` більший
+   за розмір колекції — весь список.
+
+Окремий метод `findByTeams` повертає `Optional<ScheduledMatch>` для пошуку за
+парою команд; за дубльованого ключа — перший запис у вхідному порядку.
+Жоден запит не перевіряє конкретний підтип `Match` через `if`/`switch` і не
+змінює вхідну колекцію.
 
 ## Збірка та запуск
 
