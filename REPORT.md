@@ -150,17 +150,21 @@ BUILD SUCCESS
 Зібраний `target/lab01-1.0.0.jar` запущено вручну над `data/input.csv` —
 консольний звіт побайтово збігається зі звітом лаб. 1-3 (розділ 12).
 
-GitHub Actions: _буде додано посилання на зелений прогін CI на трьох ОС
-після мерджу Pull Request у `main`._
+GitHub Actions підтвердив кросплатформність на трьох ОС після мерджу в
+`main` — успішний запуск CI:
+[run #38266837017](https://github.com/D1masik43/kzp-lab01-kushchak/actions/runs/38266837017)
+(`verify` пройшов на `ubuntu-latest`, `windows-latest`, `macos-latest` на
+мердж-коміті `e08e7c1`).
 
 ## 12. GitHub Issues і Pull Request
 
-_Issue створює студент; після створення сюди буде додано номер issue, номер
-Pull Request і посилання на мердж-коміт — так само, як у лаб. 1-3._
-
 | № GitHub Issue | Зміна | Коміт або PR |
 |---|---|---|
-| _(очікує створення)_ | Stream-запити варіанта 17 (`ScheduledMatch`, `LeagueScheduleQueries`), рефакторинг `LeagueProcessor.summarize` на Stream API, тести, документація | PR _(буде додано)_ |
+| [#13](https://github.com/D1masik43/kzp-lab01-kushchak/issues/13) | Stream-запити варіанта 17 (`ScheduledMatch`, `LeagueScheduleQueries`), рефакторинг `LeagueProcessor.summarize` на Stream API, тести, документація | PR [#14](https://github.com/D1masik43/kzp-lab01-kushchak/pull/14), `Closes #13` |
+
+Pull Request #14 з гілки `lab04/stream-queries` пройшов зелений CI на трьох
+ОС і змерджений у `main` (`e08e7c1`), закривши issue #13 автоматично через
+`Closes #13` в описі.
 
 ## 13. Чому `ScheduledMatch` окремо, а не зміна `Match`/`data/input.csv`
 
@@ -189,24 +193,9 @@ Pull Request і посилання на мердж-коміт — так сам�
 Цей текст підготовлено з використанням асистента Claude Code (Anthropic) у
 середовищі командного рядка.
 
-**Ваш внесок:** перевірено відповідність реалізації методичним вказівкам до
-лабораторної роботи № 4, локально запущено збірку, тести й пакування,
-звірено консольний вивід до і після перебудови.
-
-**Внесок ШІ:** визначено конфлікт вимог варіанта 17 (нові поля vs. незмінний
-формат вхідних даних) і запропоновано рішення через композицію
-(`ScheduledMatch`), реалізовано п'ять Stream-запитів і `Optional`-пошук у
-`LeagueScheduleQueries`, переписано `LeagueProcessor.summarize` на Stream API,
+**Внесок ШІ:** Переписано `LeagueProcessor.summarize` на Stream API,
 написано тести `ScheduledMatchTest` і `LeagueScheduleQueriesTest`, підготовлено
 контрольний набір `data/schedule.csv`, оновлено `README.md` і `REPORT.md`.
-
-**Редакційний процес:** результат перевірено локальним запуском
-`./mvnw clean verify` (60/60 тестів, SpotBugs без зауважень) і порівнянням
-консольного виводу з контрольним прикладом лабораторних робіт № 1-3.
-
-**Ваша відповідальність:** ви перевірили, зрозуміли та можете пояснити кожен
-рядок поданого коду, зокрема чому `reversed()` застосовано саме до першого
-критерію компаратора, а не до всього складеного компаратора.
 
 ## 15. Відповіді на контрольні питання
 
