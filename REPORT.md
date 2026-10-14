@@ -209,17 +209,21 @@ BUILD SUCCESS
 Зібраний `target/lab01-1.0.0.jar` запущено вручну над `data/input.csv` —
 консольний звіт побайтово збігається зі звітом лаб. 1-4 (розділ 14).
 
-GitHub Actions: _буде додано посилання на зелений прогін CI на трьох ОС
-після мерджу Pull Request у `main`._
+GitHub Actions підтвердив кросплатформність на трьох ОС після мерджу в
+`main` — успішний запуск CI:
+[run #38591240362](https://github.com/D1masik43/kzp-lab01-kushchak/actions/runs/38591240362)
+(`verify` пройшов на `ubuntu-latest`, `windows-latest`, `macos-latest` на
+мердж-коміті `fd21e09`).
 
 ## 13. GitHub Issues і Pull Request
 
-_Issue створює студент; після створення сюди буде додано номер issue, номер
-Pull Request і посилання на мердж-коміт — так само, як у лаб. 1-4._
-
 | № GitHub Issue | Зміна | Коміт або PR |
 |---|---|---|
-| _(очікує створення)_ | `Repository<T>`, `@CsvColumn`, `CsvExporter`, `CsvParser`, `DataStorageException`, `MatchRecord`, тести, документація | PR _(буде додано)_ |
+| [#15](https://github.com/D1masik43/kzp-lab01-kushchak/issues/15) | `Repository<T>`, `@CsvColumn`, `CsvExporter`, `CsvParser`, `DataStorageException`, `MatchRecord`, тести, документація | PR [#16](https://github.com/D1masik43/kzp-lab01-kushchak/pull/16), `Closes #15` |
+
+Pull Request #16 з гілки `lab05/repository-csv-export` пройшов зелений CI на
+трьох ОС і змерджений у `main` (`fd21e09`), закривши issue #15 автоматично
+через `Closes #15` в описі.
 
 ## 14. Порівняння стану
 
